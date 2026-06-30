@@ -107,6 +107,8 @@ const GAME_KEY_CODES = new Set([
   "ArrowUp",
   "ArrowDown",
 ]);
+let viewportWidth = window.innerWidth;
+let viewportHeight = window.innerHeight;
 let running = false;
 let gameEnded = false;
 let lastTime = 0;
@@ -214,12 +216,19 @@ function showScreen(name) {
   screens[name].classList.add("active");
 }
 
+function syncViewportHeight() {
+  viewportWidth = Math.round(window.visualViewport?.width || window.innerWidth);
+  viewportHeight = Math.round(window.visualViewport?.height || window.innerHeight);
+  document.documentElement.style.setProperty("--app-height", `${viewportHeight}px`);
+}
+
 function resizeCanvas() {
+  syncViewportHeight();
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = Math.round(innerWidth * ratio);
-  canvas.height = Math.round(innerHeight * ratio);
-  canvas.style.width = `${innerWidth}px`;
-  canvas.style.height = `${innerHeight}px`;
+  canvas.width = Math.round(viewportWidth * ratio);
+  canvas.height = Math.round(viewportHeight * ratio);
+  canvas.style.width = `${viewportWidth}px`;
+  canvas.style.height = `${viewportHeight}px`;
   ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
   if (running && player.grounded) {
     const crater = player.inCrater
@@ -230,11 +239,11 @@ function resizeCanvas() {
 }
 
 function groundY() {
-  return innerHeight - Math.max(74, innerHeight * 0.12);
+  return viewportHeight - Math.max(74, viewportHeight * 0.12);
 }
 
 function laneY(depth) {
-  return groundY() - (1 - depth) * Math.min(145, innerHeight * 0.2);
+  return groundY() - (1 - depth) * Math.min(145, viewportHeight * 0.2);
 }
 
 function depthScale(depth) {
@@ -1965,7 +1974,7 @@ function updatePunchEffects(dt) {
               damageBoss(10, false, position.x, position.y);
             } else {
               damageEnemy(target, target.hp + 20, position.x, position.y);
-              target.x += punch.facing * innerWidth;
+              target.x += punch.facing * viewportWidth;
             }
           } else {
             damageCombatTarget(target, punch.damage + attackBonus, position.x, position.y);
@@ -2184,9 +2193,9 @@ function updateShurikenProjectiles(dt) {
     (shuriken) =>
       shuriken.life > 0 &&
       shuriken.x > -140 &&
-      shuriken.x < innerWidth + 140 &&
+      shuriken.x < viewportWidth + 140 &&
       shuriken.y > -140 &&
-      shuriken.y < innerHeight + 140
+      shuriken.y < viewportHeight + 140
   );
   xinMarks = xinMarks.filter((mark) => mark.target && mark.target.alive);
   if (xinExecutionReady && xinMarks.length === 0) xinExecutionReady = false;
@@ -2212,7 +2221,7 @@ function executeXinMarkedTarget() {
   player.inCrater = false;
   player.craterId = null;
   player.facing = position.x >= player.x ? 1 : -1;
-  player.x = Math.max(42, Math.min(innerWidth - 42, position.x - player.facing * 72));
+  player.x = Math.max(42, Math.min(viewportWidth - 42, position.x - player.facing * 72));
   player.depth = position.depth;
   player.y = laneY(player.depth);
   player.vy = 0;
@@ -2624,7 +2633,7 @@ function spawnEnemy() {
   enemies.push({
     id: enemyId++,
     type,
-    x: fromLeft ? -90 : innerWidth + 90,
+    x: fromLeft ? -90 : viewportWidth + 90,
     y: laneY(depth),
     depth,
     direction,
@@ -2777,9 +2786,9 @@ function updateNoteProjectiles(dt) {
     (note) =>
       note.life > 0 &&
       note.x > -120 &&
-      note.x < innerWidth + 120 &&
+      note.x < viewportWidth + 120 &&
       note.y > -120 &&
-      note.y < innerHeight + 120
+      note.y < viewportHeight + 120
   );
   chainEffects.forEach((effect) => {
     effect.life -= dt;
@@ -2905,7 +2914,7 @@ function update(dt) {
   if (player.vx) player.runTime += dt;
 
   player.x += player.vx * dt;
-  player.x = Math.max(42, Math.min(innerWidth - 42, player.x));
+  player.x = Math.max(42, Math.min(viewportWidth - 42, player.x));
   if (!chargingJump && !stunned && player.grounded && !player.inCrater && !xinTeleporting) {
     if (movingBack) player.depth -= 0.58 * dt;
     if (movingFront) player.depth += 0.58 * dt;
@@ -2933,7 +2942,7 @@ function update(dt) {
     bullet.x += bullet.vx * dt;
     bullet.life -= dt;
   });
-  bullets = bullets.filter((bullet) => bullet.life > 0 && bullet.x > -40 && bullet.x < innerWidth + 40);
+  bullets = bullets.filter((bullet) => bullet.life > 0 && bullet.x > -40 && bullet.x < viewportWidth + 40);
   updateNoteProjectiles(dt);
   updateSwordSlashes(dt);
   updateShurikenProjectiles(dt);
@@ -2951,7 +2960,7 @@ function update(dt) {
         const count = Math.random() < 0.36 ? 2 : 1;
         for (let i = 0; i < count; i++) {
           rainBullets.push({
-            x: 40 + Math.random() * (innerWidth - 80),
+            x: 40 + Math.random() * (viewportWidth - 80),
             y: -40 - Math.random() * 100,
             vy: 570 + Math.random() * 180,
             angle: -0.14 + Math.random() * 0.28,
@@ -3141,7 +3150,7 @@ function createBossCrater() {
   boss.stepSide = !boss.stepSide;
   craters.push({
     id: craterId++,
-    x: Math.max(45, Math.min(innerWidth - 45, boss.x + footOffset * boss.direction)),
+    x: Math.max(45, Math.min(viewportWidth - 45, boss.x + footOffset * boss.direction)),
     depth: Math.max(0.13, Math.min(0.98, boss.depth + (Math.random() - 0.5) * 0.05)),
     radius,
     sink: deep ? 28 + Math.random() * 12 : 14 + Math.random() * 9,
@@ -3178,11 +3187,11 @@ function enterBossMode() {
   scoreLabelEl.textContent = "BOSS 阶段";
   scoreEl.textContent = "50";
   scoreTargetEl.textContent = "首领";
-  const spawnLeft = player.x > innerWidth / 2;
+  const spawnLeft = player.x > viewportWidth / 2;
   const depth = player.depth > 0.55 ? 0.28 : 0.9;
   const targetY = laneY(depth);
   boss = {
-    x: spawnLeft ? 120 : innerWidth - 120,
+    x: spawnLeft ? 120 : viewportWidth - 120,
     y: targetY + 520,
     targetY,
     depth,
@@ -3375,7 +3384,7 @@ function updateBossProjectiles(dt) {
     (projectile) =>
       projectile.life > 0 &&
       projectile.x > -120 &&
-      projectile.x < innerWidth + 120
+      projectile.x < viewportWidth + 120
   );
 }
 
@@ -3440,7 +3449,7 @@ function handleEnemyContact(enemy) {
     player.stunTimer = 0.5;
     player.crouching = false;
     player.x += enemy.direction * 34;
-    player.x = Math.max(42, Math.min(innerWidth - 42, player.x));
+    player.x = Math.max(42, Math.min(viewportWidth - 42, player.x));
     player.vy = -130;
     player.grounded = false;
     enemy.contactCooldown = 1.1;
@@ -3590,10 +3599,10 @@ function endMission(success, detail) {
 
 function drawBackground() {
   ctx.fillStyle = "#fff";
-  ctx.fillRect(0, 0, innerWidth, innerHeight);
+  ctx.fillRect(0, 0, viewportWidth, viewportHeight);
   if (background.complete && background.naturalWidth) {
     const imageRatio = background.naturalWidth / background.naturalHeight;
-    const screenRatio = innerWidth / innerHeight;
+    const screenRatio = viewportWidth / viewportHeight;
     let sx = 0;
     let sy = 0;
     let sw = background.naturalWidth;
@@ -3606,14 +3615,14 @@ function drawBackground() {
       sy = (background.naturalHeight - sh) / 2;
     }
     ctx.globalAlpha = 0.68;
-    ctx.drawImage(background, sx, sy, sw, sh, 0, 0, innerWidth, innerHeight);
+    ctx.drawImage(background, sx, sy, sw, sh, 0, 0, viewportWidth, viewportHeight);
     ctx.globalAlpha = 1;
-    const haze = ctx.createLinearGradient(0, 0, 0, innerHeight);
+    const haze = ctx.createLinearGradient(0, 0, 0, viewportHeight);
     haze.addColorStop(0, "rgba(255,255,255,.32)");
     haze.addColorStop(0.62, "rgba(255,255,255,.08)");
     haze.addColorStop(1, "rgba(255,255,255,.22)");
     ctx.fillStyle = haze;
-    ctx.fillRect(0, 0, innerWidth, innerHeight);
+    ctx.fillRect(0, 0, viewportWidth, viewportHeight);
   }
 
   if (mutationActive) {
@@ -3622,11 +3631,11 @@ function drawBackground() {
     redSky.addColorStop(0.55, "rgba(92, 0, 5, .52)");
     redSky.addColorStop(1, "rgba(45, 0, 0, .22)");
     ctx.fillStyle = redSky;
-    ctx.fillRect(0, 0, innerWidth, groundY());
+    ctx.fillRect(0, 0, viewportWidth, groundY());
 
-    const moonX = innerWidth * 0.52;
-    const moonY = innerHeight * 0.23;
-    const moonRadius = Math.min(innerWidth, innerHeight) * 0.105;
+    const moonX = viewportWidth * 0.52;
+    const moonY = viewportHeight * 0.23;
+    const moonRadius = Math.min(viewportWidth, viewportHeight) * 0.105;
     const moonGlow = ctx.createRadialGradient(
       moonX,
       moonY,
@@ -3662,9 +3671,9 @@ function drawBackground() {
   }
 
   ctx.fillStyle = "rgba(20,20,20,.82)";
-  ctx.fillRect(0, groundY(), innerWidth, innerHeight - groundY());
+  ctx.fillRect(0, groundY(), viewportWidth, viewportHeight - groundY());
   ctx.fillStyle = "#e32636";
-  ctx.fillRect(0, groundY(), innerWidth, 4);
+  ctx.fillRect(0, groundY(), viewportWidth, 4);
 }
 
 function drawBullet(context, bullet, rain = false) {
@@ -4529,9 +4538,11 @@ addEventListener("resize", resizeCanvas);
 addEventListener("orientationchange", () => setTimeout(resizeCanvas, 220));
 if (window.visualViewport) {
   visualViewport.addEventListener("resize", resizeCanvas);
+  visualViewport.addEventListener("scroll", syncViewportHeight);
 }
 
 setupMobileControls();
+syncViewportHeight();
 resizeCanvas();
 drawPreview();
 drawSkinPreviews();

@@ -1,6 +1,7 @@
 :root {
   color-scheme: only light;
   font-family: "Arial Black", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --app-height: 100dvh;
 }
 
 * {
@@ -12,7 +13,7 @@ body,
 #app {
   width: 100%;
   height: 100%;
-  min-height: 100dvh;
+  min-height: var(--app-height);
   margin: 0;
   overflow: hidden;
   overscroll-behavior: none;
@@ -996,7 +997,8 @@ h1 {
   html,
   body,
   #app {
-    height: 100dvh;
+    height: var(--app-height);
+    min-height: var(--app-height);
   }
 
   body {
@@ -1014,7 +1016,7 @@ h1 {
 
   #home.screen.active {
     display: flex;
-    min-height: 100dvh;
+    min-height: var(--app-height);
     flex-direction: column;
     justify-content: center;
     gap: 20px;
@@ -1060,7 +1062,7 @@ h1 {
 
   #briefing.screen.active {
     display: grid;
-    height: 100dvh;
+    height: var(--app-height);
     min-height: 0;
     grid-template-columns: minmax(116px, 30vw) 1fr;
     grid-template-rows: 1fr;
@@ -1166,6 +1168,7 @@ h1 {
   .controls-list {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 4px;
+    display: none;
   }
 
   .controls-list span {
@@ -1405,6 +1408,140 @@ h1 {
 
   .boss-hud {
     top: 52px;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 900px),
+  (orientation: portrait) and (hover: none),
+  (orientation: portrait) and (pointer: coarse) {
+  #home.screen.active {
+    justify-content: space-around;
+    gap: 12px;
+    padding: calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));
+  }
+
+  #briefing.screen.active {
+    grid-template-columns: minmax(76px, 22vw) 1fr;
+    gap: 6px;
+    padding: calc(6px + env(safe-area-inset-top)) 6px calc(6px + env(safe-area-inset-bottom));
+  }
+
+  .agent-card {
+    width: min(86px, 21vw);
+    border-width: 3px;
+    box-shadow: 4px 4px 0 #e32636;
+  }
+
+  .agent-card:hover,
+  .agent-card:focus-visible {
+    box-shadow: 4px 4px 0 #e32636;
+  }
+
+  .agent-card canvas {
+    height: calc(100% - 28px);
+  }
+
+  .agent-card span {
+    height: 28px;
+    padding: 0 2px;
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+
+  .briefing-copy > p {
+    display: none;
+  }
+
+  .briefing-copy h2 {
+    margin-bottom: 4px;
+    font-size: clamp(20px, 6.6vw, 30px);
+  }
+
+  .selection-heading {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .selection-title {
+    margin: 0 0 4px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .skin-button {
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+
+  .agent-grid,
+  .mode-grid {
+    gap: 4px;
+  }
+
+  .agent-button,
+  .mode-button {
+    min-height: 34px;
+    padding: 3px 5px;
+  }
+
+  .agent-button b,
+  .mode-button b {
+    font-size: 12px;
+  }
+
+  .agent-button small,
+  .mode-button small {
+    font-size: 7px;
+    line-height: 1.15;
+  }
+
+  .selection-divider {
+    margin: 6px 0 5px;
+  }
+
+  .controls-list {
+    display: none;
+  }
+
+  .skin-copy {
+    width: min(360px, 94vw);
+    margin: calc(42px + env(safe-area-inset-top)) auto 8px;
+  }
+
+  .skin-copy h2 {
+    margin-bottom: 7px;
+    font-size: clamp(24px, 7vw, 34px);
+  }
+
+  .skin-grid {
+    gap: 7px;
+  }
+
+  .skin-card {
+    padding-bottom: 7px;
+  }
+
+  .skin-card canvas {
+    height: min(118px, 27vh);
+  }
+
+  .skin-card b {
+    margin-top: 6px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+
+  .skin-card small {
+    padding: 0 8px;
+    font-size: 8px;
+  }
+
+  .skin-status {
+    margin-top: 8px;
+    padding: 6px 8px;
+    font-size: 10px;
   }
 }
 

@@ -246,8 +246,12 @@ function laneY(depth) {
   return groundY() - (1 - depth) * Math.min(145, viewportHeight * 0.2);
 }
 
+function worldScale() {
+  return matchMedia("(max-width: 900px), (hover: none), (pointer: coarse)").matches ? 0.78 : 1;
+}
+
 function depthScale(depth) {
-  return 0.72 + depth * 0.34;
+  return (0.72 + depth * 0.34) * worldScale();
 }
 
 function drawDragonPlayer(context, x, feetY, scale, facing, pose = "idle") {

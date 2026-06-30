@@ -1004,8 +1004,7 @@ h1 {
   }
 
   .screen.active {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
   }
 
   #game.screen.active {
@@ -1060,18 +1059,21 @@ h1 {
   }
 
   #briefing.screen.active {
-    display: flex;
-    min-height: 100dvh;
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px 12px 20px;
+    display: grid;
+    height: 100dvh;
+    min-height: 0;
+    grid-template-columns: minmax(116px, 30vw) 1fr;
+    grid-template-rows: 1fr;
+    align-items: start;
+    gap: 8px;
+    padding: calc(8px + env(safe-area-inset-top)) 8px calc(8px + env(safe-area-inset-bottom));
   }
 
   .agent-card {
     position: relative;
     top: auto;
     left: auto;
-    width: min(260px, 70vw);
+    width: min(160px, 29vw);
     margin: 0 auto;
     flex: 0 0 auto;
     border-width: 4px;
@@ -1089,28 +1091,31 @@ h1 {
   }
 
   .agent-card span {
-    height: 40px;
-    font-size: 12px;
+    height: 34px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
   }
 
   .briefing-copy {
     position: static;
     width: 100%;
+    min-width: 0;
     padding: 0 2px;
   }
 
   .briefing-copy > p {
-    margin: 0 0 6px;
-    font-size: 11px;
+    margin: 0 0 2px;
+    font-size: 9px;
   }
 
   .briefing-copy h2 {
-    margin: 0 0 10px;
-    font-size: clamp(28px, 9vw, 44px);
+    margin: 0 0 6px;
+    font-size: clamp(22px, 7vw, 36px);
   }
 
   .selection-title {
-    font-size: 14px;
+    margin-bottom: 5px;
+    font-size: 11px;
   }
 
   .selection-heading {
@@ -1119,60 +1124,65 @@ h1 {
 
   .skin-button,
   .skin-back-button {
-    padding: 6px 10px;
+    padding: 4px 7px;
     border-width: 2px;
     box-shadow: 3px 3px 0 #d5a62d;
-    font-size: 12px;
+    font-size: 10px;
+  }
+
+  .selection-divider {
+    height: 2px;
+    margin: 8px 0 7px;
   }
 
   .agent-grid,
   .mode-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px;
+    gap: 5px;
+  }
+
+  .mode-grid {
+    margin-bottom: 6px;
   }
 
   .agent-button,
   .mode-button {
-    min-height: 48px;
-    padding: 6px 8px;
+    min-height: 38px;
+    padding: 4px 6px;
     border-width: 2px;
   }
 
   .agent-button b,
   .mode-button b {
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .agent-button small,
   .mode-button small {
-    font-size: 10px;
+    font-size: 8px;
     line-height: 1.25;
   }
 
   .controls-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
   }
 
   .controls-list span {
-    gap: 6px;
-    font-size: 10px;
+    gap: 4px;
+    font-size: 8px;
   }
 
   .controls-list b {
-    width: 30px;
-    height: 30px;
-    border-width: 2px;
+    width: 22px;
+    height: 22px;
+    border-width: 1px;
+    font-size: 8px;
   }
 
   .keyboard-guide,
   .agent-demo {
-    display: block;
-    position: relative;
-    left: auto;
-    bottom: auto;
-    width: 100%;
-    flex: 0 0 auto;
+    display: none;
   }
 
   .keyboard-guide {
@@ -1186,8 +1196,18 @@ h1 {
   }
 
   .skin-copy {
-    width: min(560px, 90vw);
-    margin: 70px auto 24px;
+    width: min(620px, 94vw);
+    margin: 52px auto 12px;
+  }
+
+  .skin-copy > p:first-child {
+    margin: 0 0 2px;
+    font-size: 10px;
+  }
+
+  .skin-copy h2 {
+    margin: 0 0 10px;
+    font-size: clamp(26px, 8vw, 42px);
   }
 
   .skin-back-button {
@@ -1197,7 +1217,33 @@ h1 {
   }
 
   .skin-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .skin-card {
+    padding-bottom: 10px;
+    border-width: 3px;
+  }
+
+  .skin-card canvas {
+    height: 150px;
+  }
+
+  .skin-card b {
+    margin-top: 8px;
+    font-size: 16px;
+  }
+
+  .skin-card small {
+    margin-top: 3px;
+    font-size: 10px;
+  }
+
+  .skin-status {
+    margin-top: 12px;
+    padding: 8px 10px;
+    font-size: 11px;
   }
 
   .hud {
@@ -1287,7 +1333,7 @@ h1 {
 @media (max-width: 520px) {
   .agent-grid,
   .mode-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .keyboard-guide {
@@ -1304,15 +1350,15 @@ h1 {
   }
 
   .skin-card canvas {
-    height: 190px;
+    height: 120px;
   }
 
   .skin-card b {
-    font-size: 19px;
+    font-size: 13px;
   }
 
   .skin-card small {
-    font-size: 12px;
+    font-size: 9px;
   }
 }
 

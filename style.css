@@ -693,10 +693,10 @@ h1 {
 .mobile-controls {
   position: absolute;
   z-index: 6;
-  inset: auto 0 calc(12px + env(safe-area-inset-bottom)) 0;
+  inset: auto 0 calc(8px + env(safe-area-inset-bottom)) 0;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 0 max(14px, env(safe-area-inset-left)) 0 max(14px, env(safe-area-inset-right));
+  padding: 0 max(10px, env(safe-area-inset-left)) 0 max(10px, env(safe-area-inset-right));
   pointer-events: none;
   touch-action: none;
 }
@@ -709,31 +709,31 @@ h1 {
 
 .mobile-move-pad {
   display: grid;
-  width: 178px;
-  grid-template-columns: repeat(3, 54px);
-  grid-template-rows: repeat(3, 48px);
-  gap: 8px;
+  width: 146px;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 39px);
+  gap: 6px;
 }
 
 .mobile-skill-pad {
   display: grid;
-  width: 232px;
-  grid-template-columns: repeat(3, 58px);
-  grid-template-rows: 48px 62px;
+  width: 194px;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: 39px 53px;
   justify-content: end;
-  gap: 9px;
+  gap: 7px;
 }
 
 .touch-key {
   display: grid;
   place-items: center;
   border: 2px solid rgba(255, 255, 255, 0.75);
-  border-radius: 18px;
+  border-radius: 15px;
   color: #fff;
   background: rgba(0, 0, 0, 0.45);
   box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.09), 0 7px 18px rgba(0, 0, 0, 0.22);
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
@@ -768,27 +768,27 @@ h1 {
 .touch-key.lane-back {
   grid-column: 1;
   grid-row: 3;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .touch-key.lane-front {
   grid-column: 3;
   grid-row: 3;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .touch-key.attack {
   grid-column: span 2;
   border-color: rgba(255, 90, 102, 0.92);
-  border-radius: 24px;
+  border-radius: 20px;
   background: rgba(227, 38, 54, 0.62);
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .touch-key.ultimate {
   border-color: rgba(255, 218, 92, 0.92);
   background: rgba(85, 38, 0, 0.62);
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .mutation-banner {
@@ -1018,8 +1018,8 @@ h1 {
     min-height: 100dvh;
     flex-direction: column;
     justify-content: center;
-    gap: 28px;
-    padding: 24px;
+    gap: 20px;
+    padding: 18px;
   }
 
   .title-wrap,
@@ -1029,30 +1029,33 @@ h1 {
   }
 
   .title-wrap {
-    width: min(560px, 92vw);
+    width: min(500px, 90vw);
   }
 
   h1 {
-    font-size: clamp(46px, 15vw, 92px);
+    font-size: clamp(38px, 12vw, 76px);
   }
 
   .subtitle {
-    max-width: 330px;
+    max-width: 280px;
     line-height: 1.6;
+    font-size: clamp(13px, 3.6vw, 18px);
   }
 
   .start-button {
-    width: min(330px, 88vw);
-    height: 82px;
+    width: min(270px, 78vw);
+    height: 66px;
+    border-left-width: 9px;
+    font-size: clamp(22px, 6vw, 34px);
   }
 
   .home-agent {
     align-self: flex-end;
-    width: 72px;
-    height: 160px;
+    width: 58px;
+    height: 130px;
     margin-right: 10vw;
     opacity: 0.24;
-    transform: scale(0.72);
+    transform: scale(0.6);
     transform-origin: bottom right;
   }
 
@@ -1060,24 +1063,34 @@ h1 {
     display: flex;
     min-height: 100dvh;
     flex-direction: column;
-    gap: 18px;
-    padding: 18px 16px 28px;
+    gap: 12px;
+    padding: 12px 12px 20px;
   }
 
   .agent-card {
     position: relative;
     top: auto;
     left: auto;
-    width: min(330px, 82vw);
+    width: min(260px, 70vw);
     margin: 0 auto;
     flex: 0 0 auto;
-    box-shadow: 9px 9px 0 #e32636;
+    border-width: 4px;
+    box-shadow: 7px 7px 0 #e32636;
   }
 
   .agent-card:hover,
   .agent-card:focus-visible {
     transform: none;
-    box-shadow: 9px 9px 0 #e32636;
+    box-shadow: 7px 7px 0 #e32636;
+  }
+
+  .agent-card canvas {
+    height: calc(100% - 40px);
+  }
+
+  .agent-card span {
+    height: 40px;
+    font-size: 12px;
   }
 
   .briefing-copy {
@@ -1088,12 +1101,16 @@ h1 {
 
   .briefing-copy > p {
     margin: 0 0 6px;
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .briefing-copy h2 {
-    margin: 0 0 14px;
-    font-size: clamp(34px, 11vw, 54px);
+    margin: 0 0 10px;
+    font-size: clamp(28px, 9vw, 44px);
+  }
+
+  .selection-title {
+    font-size: 14px;
   }
 
   .selection-heading {
@@ -1102,47 +1119,49 @@ h1 {
 
   .skin-button,
   .skin-back-button {
-    padding: 7px 12px;
-    box-shadow: 4px 4px 0 #d5a62d;
-    font-size: 14px;
+    padding: 6px 10px;
+    border-width: 2px;
+    box-shadow: 3px 3px 0 #d5a62d;
+    font-size: 12px;
   }
 
   .agent-grid,
   .mode-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
+    gap: 7px;
   }
 
   .agent-button,
   .mode-button {
-    min-height: 58px;
-    padding: 8px 10px;
+    min-height: 48px;
+    padding: 6px 8px;
+    border-width: 2px;
   }
 
   .agent-button b,
   .mode-button b {
-    font-size: 19px;
+    font-size: 16px;
   }
 
   .agent-button small,
   .mode-button small {
-    font-size: 11px;
+    font-size: 10px;
     line-height: 1.25;
   }
 
   .controls-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    gap: 6px;
   }
 
   .controls-list span {
-    gap: 8px;
-    font-size: 12px;
+    gap: 6px;
+    font-size: 10px;
   }
 
   .controls-list b {
-    width: 37px;
-    height: 37px;
+    width: 30px;
+    height: 30px;
     border-width: 2px;
   }
 
@@ -1157,18 +1176,18 @@ h1 {
   }
 
   .keyboard-guide {
-    height: clamp(116px, 32vw, 168px);
-    margin: 4px 0 0;
+    height: clamp(92px, 24vw, 132px);
+    margin: 2px 0 0;
   }
 
   .agent-demo {
-    height: 108px;
-    opacity: 0.86;
+    height: 84px;
+    opacity: 0.8;
   }
 
   .skin-copy {
-    width: min(640px, 92vw);
-    margin: 86px auto 30px;
+    width: min(560px, 90vw);
+    margin: 70px auto 24px;
   }
 
   .skin-back-button {
@@ -1184,27 +1203,29 @@ h1 {
   .hud {
     top: calc(10px + env(safe-area-inset-top));
     left: calc(10px + env(safe-area-inset-left));
-    right: calc(58px + env(safe-area-inset-right));
+    right: calc(48px + env(safe-area-inset-right));
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 5px;
   }
 
   .health-status,
   .score,
   .ultimate-status,
   .rescue-time {
-    padding: 7px 9px;
+    padding: 5px 7px;
     border-width: 2px;
-    box-shadow: 3px 3px 0 rgba(227, 38, 54, 0.82);
-    font-size: 12px;
+    box-shadow: 2px 2px 0 rgba(227, 38, 54, 0.82);
+    font-size: 10px;
   }
 
   .health-status {
-    min-width: 166px;
+    min-width: 132px;
+    gap: 6px;
   }
 
   .health-track {
-    width: 66px;
+    width: 48px;
+    height: 10px;
   }
 
   .ultimate-status {
@@ -1212,29 +1233,54 @@ h1 {
   }
 
   .rescue-time {
-    min-width: 126px;
+    min-width: 104px;
   }
 
   .rescue-time strong {
-    font-size: 15px;
+    margin-left: 4px;
+    font-size: 12px;
   }
 
   .boss-hud {
-    top: calc(72px + env(safe-area-inset-top));
-    width: min(520px, 72vw);
-    padding: 8px 12px;
-    font-size: 12px;
+    top: calc(58px + env(safe-area-inset-top));
+    width: min(420px, 64vw);
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
+  .mutation-banner span {
+    font-size: clamp(44px, 10vw, 112px);
   }
 
   .restart-button {
     top: calc(10px + env(safe-area-inset-top));
     right: calc(10px + env(safe-area-inset-right));
-    width: 42px;
-    height: 42px;
+    width: 34px;
+    height: 34px;
+    border-width: 2px;
+    font-size: 20px;
   }
 
   .hint {
     display: none;
+  }
+
+  .result-card {
+    width: min(420px, 82vw);
+    padding: 28px;
+    border-width: 4px;
+    box-shadow: 11px 11px 0 #e32636;
+  }
+
+  .result-card h2 {
+    margin: 12px 0;
+    font-size: clamp(34px, 7vw, 58px);
+  }
+
+  .result-card button {
+    margin-top: 10px;
+    padding: 10px 22px;
+    font-size: 13px;
   }
 }
 
@@ -1245,19 +1291,28 @@ h1 {
   }
 
   .keyboard-guide {
-    height: 118px;
+    height: 88px;
   }
 
   .keyboard-guide figcaption {
-    font-size: 12px;
+    font-size: 10px;
+    padding: 3px 8px;
   }
 
   .agent-demo {
-    height: 96px;
+    height: 76px;
   }
 
   .skin-card canvas {
-    height: 230px;
+    height: 190px;
+  }
+
+  .skin-card b {
+    font-size: 19px;
+  }
+
+  .skin-card small {
+    font-size: 12px;
   }
 }
 
@@ -1275,35 +1330,35 @@ h1 {
 
 @media (orientation: landscape) and (max-height: 430px) {
   .mobile-move-pad {
-    width: 146px;
-    grid-template-columns: repeat(3, 44px);
-    grid-template-rows: repeat(3, 39px);
-    gap: 6px;
+    width: 128px;
+    grid-template-columns: repeat(3, 38px);
+    grid-template-rows: repeat(3, 34px);
+    gap: 5px;
   }
 
   .mobile-skill-pad {
-    width: 194px;
-    grid-template-columns: repeat(3, 48px);
-    grid-template-rows: 39px 53px;
-    gap: 7px;
+    width: 168px;
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: 34px 46px;
+    gap: 6px;
   }
 
   .touch-key {
-    border-radius: 15px;
-    font-size: 13px;
+    border-radius: 13px;
+    font-size: 11px;
   }
 
   .touch-key.attack {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .hud {
-    transform: scale(0.86);
+    transform: scale(0.78);
     transform-origin: top left;
   }
 
   .boss-hud {
-    top: 62px;
+    top: 52px;
   }
 }
 
@@ -1316,7 +1371,7 @@ h1 {
     inset: 0;
     display: grid;
     place-items: center;
-    padding: 28px;
+    padding: 22px;
     color: #fff;
     background: rgba(0, 0, 0, 0.72);
     text-align: center;
@@ -1325,15 +1380,16 @@ h1 {
 
   .mobile-rotate-tip b {
     display: block;
-    font-size: clamp(34px, 11vw, 62px);
+    font-size: clamp(28px, 9vw, 48px);
     text-shadow: 4px 4px 0 #e32636;
   }
 
   .mobile-rotate-tip span {
     display: block;
-    margin-top: 12px;
+    margin-top: 8px;
     color: #f0f0f0;
     font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 13px;
     font-weight: 800;
   }
 

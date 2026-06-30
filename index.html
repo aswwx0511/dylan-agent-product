@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     <title>火柴特工</title>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -124,6 +124,27 @@
           <div class="rescue-time">救援时间 <strong id="rescue-time">03:00</strong></div>
         </div>
         <div id="hint" class="hint">A / D 移动　W 跳跃　K 蓄力高跳　J / L 左右空翻　空格普攻　F 大招</div>
+        <div class="mobile-rotate-tip">
+          <b>请横屏游玩</b>
+          <span>手机横过来后，会出现虚拟按键。</span>
+        </div>
+        <div id="mobile-controls" class="mobile-controls" aria-label="手机虚拟操作按键">
+          <div class="mobile-pad mobile-move-pad" aria-label="移动控制">
+            <button class="touch-key jump" data-code="KeyW" aria-label="跳跃">跳</button>
+            <button class="touch-key left" data-code="KeyA" aria-label="向左移动">←</button>
+            <button class="touch-key right" data-code="KeyD" aria-label="向右移动">→</button>
+            <button class="touch-key crouch" data-code="KeyS" aria-label="蹲下">蹲</button>
+            <button class="touch-key lane-back" data-code="ArrowUp" aria-label="向后穿行">后</button>
+            <button class="touch-key lane-front" data-code="ArrowDown" aria-label="向前穿行">前</button>
+          </div>
+          <div class="mobile-pad mobile-skill-pad" aria-label="技能控制">
+            <button class="touch-key flip-left" data-code="KeyJ" aria-label="左空翻">J</button>
+            <button class="touch-key charge" data-code="KeyK" aria-label="蓄力高跳">K</button>
+            <button class="touch-key flip-right" data-code="KeyL" aria-label="右空翻">L</button>
+            <button class="touch-key ultimate" data-code="KeyF" aria-label="大招">大招</button>
+            <button class="touch-key attack" data-code="Space" aria-label="普攻">普攻</button>
+          </div>
+        </div>
         <div id="boss-hud" class="boss-hud">
           <span>变异首领</span>
           <div><i id="boss-health-fill"></i></div>

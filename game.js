@@ -94,6 +94,19 @@ let activeAgent = "long";
 let selectedSkin = "classic";
 let activeSkin = "classic";
 const keys = new Set();
+const GAME_KEY_CODES = new Set([
+  "KeyW",
+  "KeyA",
+  "KeyD",
+  "KeyS",
+  "KeyF",
+  "KeyK",
+  "KeyJ",
+  "KeyL",
+  "Space",
+  "ArrowUp",
+  "ArrowDown",
+]);
 let running = false;
 let gameEnded = false;
 let lastTime = 0;
@@ -4316,6 +4329,130 @@ function loop(time) {
   requestAnimationFrame(loop);
 }
 
+function pressGameKey(code, repeat = false) {
+  if (!GAME_KEY_CODES.has(code)) return;
+  keys.add(code);
+  if (
+    running &&
+    activeAgent === "xin" &&
+    code === "Space" &&
+    !repeat
+  ) {
+    xinAttack();
+  }
+  if (
+    running &&
+    player.stunTimer <= 0 &&
+    !player.inCrater &&
+    code === "KeyS" &&
+    !repeat &&
+    player.grounded
+  ) {
+    player.crouching = !player.crouching;
+  }
+  const canGroundJump = player.grounded;
+  const canXinDoubleJump =
+    activeAgent === "xin" && !player.grounded && player.jumpCount < 2;
+  if (
+    running &&
+    player.stunTimer <= 0 &&
+    code === "KeyW" &&
+    !repeat &&
+    (canGroundJump || canXinDoubleJump)
+  ) {
+    player.crouching = false;
+    if (player.inCrater) {
+      player.inCrater = false;
+      player.craterId = null;
+      player.craterImmunity = 0.85;
+    }
+    player.jumpCount += 1;
+    const chargedJumpPower = -650 - player.jumpCharge * 310;
+    player.vy = canXinDoubleJump ? -610 : chargedJumpPower;
+    player.grounded = false;
+    if (!canXinDoubleJump) {
+      if (player.jumpCharge > 0.05) {
+        const burstCount = Math.round(7 + player.jumpCharge * 13);
+        makeBurst(player.x, player.y + 2, player.jumpCharge >= 1 ? "#ffe14d" : "#f08b3e", burstCount);
+        playNoise(0.12, 0.055 + player.jumpCharge * 0.055, 900);
+        playTone(180 + player.jumpCharge * 210, 0.14, 0.045, "triangle");
+      }
+      player.jumpCharge = 0;
+      player.chargeReadyAnnounced = false;
+    }
+    if (activeAgent === "xin") {
+      makeBurst(player.x, player.y + 2, "#9d6bb8", canXinDoubleJump ? 14 : 9);
+      playNoise(0.14, canXinDoubleJump ? 0.1 : 0.07, 850);
+      playTone(canXinDoubleJump ? 230 : 180, 0.12, 0.05, "triangle");
+    }
+  }
+  if (
+    running &&
+    player.stunTimer <= 0 &&
+    !player.inCrater &&
+    !xinTeleportReturn &&
+    !repeat &&
+    (code === "KeyJ" || code === "KeyL") &&
+    player.flipCooldown <= 0
+  ) {
+    const startedGrounded = player.grounded;
+    player.flipDirection = code === "KeyJ" ? -1 : 1;
+    player.flipTimer = FLIP_DURATION;
+    player.flipCooldown = FLIP_COOLDOWN;
+    player.facing = player.flipDirection;
+    player.crouching = false;
+    player.grounded = false;
+    player.jumpCount = Math.max(player.jumpCount, 1);
+    player.vy = startedGrounded ? -510 : Math.min(player.vy, -170);
+    makeBurst(player.x, player.y - 8, "#d7e8f2", 10);
+    playNoise(0.13, 0.07, 1400);
+    playTone(260, 0.12, 0.035, "triangle");
+  }
+  if (running && player.stunTimer <= 0 && (code === "KeyA" || code === "KeyD")) {
+    player.crouching = false;
+  }
+  if (running && !player.inCrater && code === "KeyF" && !repeat) startUltimate();
+}
+
+function releaseGameKey(code) {
+  keys.delete(code);
+  if (code === "Space" && running) releaseSpecialAttack();
+}
+
+function setupMobileControls() {
+  const buttons = document.querySelectorAll(".touch-key[data-code]");
+  buttons.forEach((button) => {
+    const code = button.dataset.code;
+    let pressed = false;
+
+    const press = (event) => {
+      event.preventDefault();
+      if (pressed) return;
+      pressed = true;
+      button.classList.add("is-pressed");
+      if (event.pointerId !== undefined && button.setPointerCapture) {
+        button.setPointerCapture(event.pointerId);
+      }
+      ensureAudio();
+      pressGameKey(code, false);
+    };
+
+    const release = (event) => {
+      event.preventDefault();
+      if (!pressed) return;
+      pressed = false;
+      button.classList.remove("is-pressed");
+      releaseGameKey(code);
+    };
+
+    button.addEventListener("pointerdown", press);
+    button.addEventListener("pointerup", release);
+    button.addEventListener("pointercancel", release);
+    button.addEventListener("lostpointercapture", release);
+    button.addEventListener("contextmenu", (event) => event.preventDefault());
+  });
+}
+
 document.querySelector("#start-button").addEventListener("click", () => {
   showScreen("briefing");
   drawPreview();
@@ -4378,99 +4515,23 @@ document.querySelector("#restart-button").addEventListener("click", () => {
 document.querySelector("#play-again-button").addEventListener("click", startGame);
 
 addEventListener("keydown", (event) => {
-  if (["KeyW", "KeyA", "KeyD", "KeyS", "KeyF", "KeyK", "KeyJ", "KeyL", "Space", "ArrowUp", "ArrowDown"].includes(event.code)) {
+  if (GAME_KEY_CODES.has(event.code)) {
     event.preventDefault();
   }
-  keys.add(event.code);
-  if (
-    running &&
-    activeAgent === "xin" &&
-    event.code === "Space" &&
-    !event.repeat
-  ) {
-    xinAttack();
-  }
-  if (
-    running &&
-    player.stunTimer <= 0 &&
-    !player.inCrater &&
-    event.code === "KeyS" &&
-    !event.repeat &&
-    player.grounded
-  ) {
-    player.crouching = !player.crouching;
-  }
-  const canGroundJump = player.grounded;
-  const canXinDoubleJump =
-    activeAgent === "xin" && !player.grounded && player.jumpCount < 2;
-  if (
-    running &&
-    player.stunTimer <= 0 &&
-    event.code === "KeyW" &&
-    !event.repeat &&
-    (canGroundJump || canXinDoubleJump)
-  ) {
-    player.crouching = false;
-    if (player.inCrater) {
-      player.inCrater = false;
-      player.craterId = null;
-      player.craterImmunity = 0.85;
-    }
-    player.jumpCount += 1;
-    const chargedJumpPower = -650 - player.jumpCharge * 310;
-    player.vy = canXinDoubleJump ? -610 : chargedJumpPower;
-    player.grounded = false;
-    if (!canXinDoubleJump) {
-      if (player.jumpCharge > 0.05) {
-        const burstCount = Math.round(7 + player.jumpCharge * 13);
-        makeBurst(player.x, player.y + 2, player.jumpCharge >= 1 ? "#ffe14d" : "#f08b3e", burstCount);
-        playNoise(0.12, 0.055 + player.jumpCharge * 0.055, 900);
-        playTone(180 + player.jumpCharge * 210, 0.14, 0.045, "triangle");
-      }
-      player.jumpCharge = 0;
-      player.chargeReadyAnnounced = false;
-    }
-    if (activeAgent === "xin") {
-      makeBurst(player.x, player.y + 2, "#9d6bb8", canXinDoubleJump ? 14 : 9);
-      playNoise(0.14, canXinDoubleJump ? 0.1 : 0.07, 850);
-      playTone(canXinDoubleJump ? 230 : 180, 0.12, 0.05, "triangle");
-    }
-  }
-  if (
-    running &&
-    player.stunTimer <= 0 &&
-    !player.inCrater &&
-    !xinTeleportReturn &&
-    !event.repeat &&
-    (event.code === "KeyJ" || event.code === "KeyL") &&
-    player.flipCooldown <= 0
-  ) {
-    const startedGrounded = player.grounded;
-    player.flipDirection = event.code === "KeyJ" ? -1 : 1;
-    player.flipTimer = FLIP_DURATION;
-    player.flipCooldown = FLIP_COOLDOWN;
-    player.facing = player.flipDirection;
-    player.crouching = false;
-    player.grounded = false;
-    player.jumpCount = Math.max(player.jumpCount, 1);
-    player.vy = startedGrounded ? -510 : Math.min(player.vy, -170);
-    makeBurst(player.x, player.y - 8, "#d7e8f2", 10);
-    playNoise(0.13, 0.07, 1400);
-    playTone(260, 0.12, 0.035, "triangle");
-  }
-  if (running && player.stunTimer <= 0 && (event.code === "KeyA" || event.code === "KeyD")) {
-    player.crouching = false;
-  }
-  if (running && !player.inCrater && event.code === "KeyF" && !event.repeat) startUltimate();
+  pressGameKey(event.code, event.repeat);
 });
 
 addEventListener("keyup", (event) => {
-  keys.delete(event.code);
-  if (event.code === "Space" && running) releaseSpecialAttack();
+  releaseGameKey(event.code);
 });
 addEventListener("blur", () => keys.clear());
 addEventListener("resize", resizeCanvas);
+addEventListener("orientationchange", () => setTimeout(resizeCanvas, 220));
+if (window.visualViewport) {
+  visualViewport.addEventListener("resize", resizeCanvas);
+}
 
+setupMobileControls();
 resizeCanvas();
 drawPreview();
 drawSkinPreviews();

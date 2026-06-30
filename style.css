@@ -12,12 +12,15 @@ body,
 #app {
   width: 100%;
   height: 100%;
+  min-height: 100dvh;
   margin: 0;
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 button {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .screen {
@@ -682,6 +685,112 @@ h1 {
   opacity: 0;
 }
 
+.mobile-rotate-tip,
+.mobile-controls {
+  display: none;
+}
+
+.mobile-controls {
+  position: absolute;
+  z-index: 6;
+  inset: auto 0 calc(12px + env(safe-area-inset-bottom)) 0;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 max(14px, env(safe-area-inset-left)) 0 max(14px, env(safe-area-inset-right));
+  pointer-events: none;
+  touch-action: none;
+}
+
+.mobile-pad {
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.mobile-move-pad {
+  display: grid;
+  width: 178px;
+  grid-template-columns: repeat(3, 54px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 8px;
+}
+
+.mobile-skill-pad {
+  display: grid;
+  width: 232px;
+  grid-template-columns: repeat(3, 58px);
+  grid-template-rows: 48px 62px;
+  justify-content: end;
+  gap: 9px;
+}
+
+.touch-key {
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.09), 0 7px 18px rgba(0, 0, 0, 0.22);
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.touch-key.is-pressed {
+  color: #111;
+  background: rgba(255, 255, 255, 0.82);
+  transform: scale(0.94);
+}
+
+.touch-key.jump {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.touch-key.left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.touch-key.right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.touch-key.crouch {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.touch-key.lane-back {
+  grid-column: 1;
+  grid-row: 3;
+  font-size: 13px;
+}
+
+.touch-key.lane-front {
+  grid-column: 3;
+  grid-row: 3;
+  font-size: 13px;
+}
+
+.touch-key.attack {
+  grid-column: span 2;
+  border-color: rgba(255, 90, 102, 0.92);
+  border-radius: 24px;
+  background: rgba(227, 38, 54, 0.62);
+  font-size: 18px;
+}
+
+.touch-key.ultimate {
+  border-color: rgba(255, 218, 92, 0.92);
+  background: rgba(85, 38, 0, 0.62);
+  font-size: 13px;
+}
+
 .mutation-banner {
   position: absolute;
   inset: 0;
@@ -747,6 +856,7 @@ h1 {
 .result-overlay {
   position: absolute;
   inset: 0;
+  z-index: 9;
   display: none;
   place-items: center;
   background: rgba(0, 0, 0, 0.72);
@@ -879,5 +989,355 @@ h1 {
   .keyboard-guide {
     bottom: calc(2.2vh + 92px);
     height: 122px;
+  }
+}
+
+@media (max-width: 900px), (hover: none), (pointer: coarse) {
+  html,
+  body,
+  #app {
+    height: 100dvh;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .screen.active {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #game.screen.active {
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  #home.screen.active {
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+    padding: 24px;
+  }
+
+  .title-wrap,
+  .start-button,
+  .home-agent {
+    position: static;
+  }
+
+  .title-wrap {
+    width: min(560px, 92vw);
+  }
+
+  h1 {
+    font-size: clamp(46px, 15vw, 92px);
+  }
+
+  .subtitle {
+    max-width: 330px;
+    line-height: 1.6;
+  }
+
+  .start-button {
+    width: min(330px, 88vw);
+    height: 82px;
+  }
+
+  .home-agent {
+    align-self: flex-end;
+    width: 72px;
+    height: 160px;
+    margin-right: 10vw;
+    opacity: 0.24;
+    transform: scale(0.72);
+    transform-origin: bottom right;
+  }
+
+  #briefing.screen.active {
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px 16px 28px;
+  }
+
+  .agent-card {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: min(330px, 82vw);
+    margin: 0 auto;
+    flex: 0 0 auto;
+    box-shadow: 9px 9px 0 #e32636;
+  }
+
+  .agent-card:hover,
+  .agent-card:focus-visible {
+    transform: none;
+    box-shadow: 9px 9px 0 #e32636;
+  }
+
+  .briefing-copy {
+    position: static;
+    width: 100%;
+    padding: 0 2px;
+  }
+
+  .briefing-copy > p {
+    margin: 0 0 6px;
+    font-size: 13px;
+  }
+
+  .briefing-copy h2 {
+    margin: 0 0 14px;
+    font-size: clamp(34px, 11vw, 54px);
+  }
+
+  .selection-heading {
+    flex-wrap: wrap;
+  }
+
+  .skin-button,
+  .skin-back-button {
+    padding: 7px 12px;
+    box-shadow: 4px 4px 0 #d5a62d;
+    font-size: 14px;
+  }
+
+  .agent-grid,
+  .mode-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .agent-button,
+  .mode-button {
+    min-height: 58px;
+    padding: 8px 10px;
+  }
+
+  .agent-button b,
+  .mode-button b {
+    font-size: 19px;
+  }
+
+  .agent-button small,
+  .mode-button small {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .controls-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .controls-list span {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .controls-list b {
+    width: 37px;
+    height: 37px;
+    border-width: 2px;
+  }
+
+  .keyboard-guide,
+  .agent-demo {
+    display: block;
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .keyboard-guide {
+    height: clamp(116px, 32vw, 168px);
+    margin: 4px 0 0;
+  }
+
+  .agent-demo {
+    height: 108px;
+    opacity: 0.86;
+  }
+
+  .skin-copy {
+    width: min(640px, 92vw);
+    margin: 86px auto 30px;
+  }
+
+  .skin-back-button {
+    position: fixed;
+    top: calc(14px + env(safe-area-inset-top));
+    left: calc(14px + env(safe-area-inset-left));
+  }
+
+  .skin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hud {
+    top: calc(10px + env(safe-area-inset-top));
+    left: calc(10px + env(safe-area-inset-left));
+    right: calc(58px + env(safe-area-inset-right));
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .health-status,
+  .score,
+  .ultimate-status,
+  .rescue-time {
+    padding: 7px 9px;
+    border-width: 2px;
+    box-shadow: 3px 3px 0 rgba(227, 38, 54, 0.82);
+    font-size: 12px;
+  }
+
+  .health-status {
+    min-width: 166px;
+  }
+
+  .health-track {
+    width: 66px;
+  }
+
+  .ultimate-status {
+    margin-left: 0;
+  }
+
+  .rescue-time {
+    min-width: 126px;
+  }
+
+  .rescue-time strong {
+    font-size: 15px;
+  }
+
+  .boss-hud {
+    top: calc(72px + env(safe-area-inset-top));
+    width: min(520px, 72vw);
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .restart-button {
+    top: calc(10px + env(safe-area-inset-top));
+    right: calc(10px + env(safe-area-inset-right));
+    width: 42px;
+    height: 42px;
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .agent-grid,
+  .mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .keyboard-guide {
+    height: 118px;
+  }
+
+  .keyboard-guide figcaption {
+    font-size: 12px;
+  }
+
+  .agent-demo {
+    height: 96px;
+  }
+
+  .skin-card canvas {
+    height: 230px;
+  }
+}
+
+@media (orientation: landscape) and (max-width: 900px),
+  (orientation: landscape) and (hover: none),
+  (orientation: landscape) and (pointer: coarse) {
+  .mobile-controls {
+    display: flex;
+  }
+
+  .mobile-rotate-tip {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 430px) {
+  .mobile-move-pad {
+    width: 146px;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 39px);
+    gap: 6px;
+  }
+
+  .mobile-skill-pad {
+    width: 194px;
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: 39px 53px;
+    gap: 7px;
+  }
+
+  .touch-key {
+    border-radius: 15px;
+    font-size: 13px;
+  }
+
+  .touch-key.attack {
+    font-size: 16px;
+  }
+
+  .hud {
+    transform: scale(0.86);
+    transform-origin: top left;
+  }
+
+  .boss-hud {
+    top: 62px;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 900px),
+  (orientation: portrait) and (hover: none),
+  (orientation: portrait) and (pointer: coarse) {
+  #game .mobile-rotate-tip {
+    position: absolute;
+    z-index: 7;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.72);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .mobile-rotate-tip b {
+    display: block;
+    font-size: clamp(34px, 11vw, 62px);
+    text-shadow: 4px 4px 0 #e32636;
+  }
+
+  .mobile-rotate-tip span {
+    display: block;
+    margin-top: 12px;
+    color: #f0f0f0;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-weight: 800;
+  }
+
+  .mobile-controls {
+    display: none;
   }
 }

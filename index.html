@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>火柴特工</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="home" class="screen active" aria-label="游戏主页">
+        <div class="title-wrap">
+          <p class="eyebrow">DYLAN'S GAME</p>
+          <h1>《火柴特工》</h1>
+          <p class="subtitle">废墟行动 · 双枪出击</p>
+        </div>
+        <button id="start-button" class="start-button">开始</button>
+        <div class="home-agent" aria-hidden="true"></div>
+      </section>
+
+      <section id="briefing" class="screen" aria-label="角色准备">
+        <button id="agent-card" class="agent-card" aria-label="点击火柴人进入战斗">
+          <canvas id="preview-canvas" width="220" height="220"></canvas>
+          <span id="agent-card-label">龙 · 点击进入战斗</span>
+        </button>
+        <div class="briefing-copy">
+          <p>AGENT 010</p>
+          <h2>行动准备</h2>
+          <div class="selection-heading">
+            <h3 class="selection-title">选择特工</h3>
+            <button id="skin-button" class="skin-button">更换皮肤</button>
+          </div>
+          <div class="agent-grid" aria-label="特工选择">
+            <button class="agent-button selected" data-agent="long">
+              <b>龙</b><small>双枪特工 · 子弹雨</small>
+            </button>
+            <button class="agent-button thunder" data-agent="lei">
+              <b>雷</b><small>紫色吉他 · 追踪音符 · 闪电传导</small>
+            </button>
+            <button class="agent-button shadow" data-agent="xin">
+              <b>信</b><small>隐之信 · 暗黑武士刀 · 二段跳</small>
+            </button>
+            <button class="agent-button wild" data-agent="wolf">
+              <b>狂狼</b><small>机械狼爪 · 撕裂减速 · 狂猎</small>
+            </button>
+            <button class="agent-button void" data-agent="dong">
+              <b>洞</b><small>追踪黑洞 · 绝境升空 · 范围爆炸</small>
+            </button>
+            <button class="agent-button fist" data-agent="quan">
+              <b>拳</b><small>烈焰拳套 · 五段连击 · 超级烈焰拳</small>
+            </button>
+          </div>
+          <div class="selection-divider" aria-hidden="true"></div>
+          <h3 class="selection-title mode-title">选择模式</h3>
+          <div class="mode-grid" aria-label="难度选择">
+            <button class="mode-button" data-mode="easy">
+              <b>简单</b><small>13 血 · 02:30 · 无血月</small>
+            </button>
+            <button class="mode-button selected" data-mode="normal">
+              <b>普通</b><small>10 血 · 03:00 · 标准行动</small>
+            </button>
+            <button class="mode-button" data-mode="hard">
+              <b>困难</b><small>7 血 · 04:00 · 敌人更多</small>
+            </button>
+            <button class="mode-button hell" data-mode="hell">
+              <b>地狱</b><small>6 血 · 05:00 · 大怪与 Boss</small>
+            </button>
+          </div>
+          <div class="controls-list">
+            <span><b>W</b> 跳跃</span>
+            <span><b>A D</b> 左右移动</span>
+            <span><b>S</b> 蹲下</span>
+            <span><b>空格</b> 普攻</span>
+            <span><b>F</b> 特工大招</span>
+            <span><b>↑ ↓</b> 前后穿行</span>
+            <span><b>K</b> 蓄力高跳</span>
+            <span><b>J L</b> 左右空翻</span>
+          </div>
+        </div>
+        <figure class="keyboard-guide" aria-label="推荐键位：左手控制 W A D，右手控制 J K L，双手拇指控制空格">
+          <figcaption>推荐键位</figcaption>
+          <img
+            src="assets/recommended-keyboard.png"
+            alt="左手中指按 W、无名指按 A、食指按 D；右手中指按 K、无名指按 J、食指按 L；双手拇指按空格"
+          >
+        </figure>
+        <div class="agent-demo" aria-label="特工技能循环演示">
+          <span>技能预览 · 安全演示</span>
+          <canvas id="agent-demo-canvas" width="700" height="140"></canvas>
+        </div>
+      </section>
+
+      <section id="skins" class="screen skin-screen" aria-label="皮肤选择">
+        <button id="skin-back-button" class="skin-back-button">← 返回行动准备</button>
+        <div class="skin-copy">
+          <p>AGENT ARMORY</p>
+          <h2>特工皮肤</h2>
+          <div class="skin-grid">
+            <button class="skin-card selected" data-skin="classic">
+              <canvas id="classic-skin-canvas" width="260" height="270"></canvas>
+              <b>龙 · 原装战甲</b>
+              <small>双枪 · 子弹雨</small>
+            </button>
+            <button class="skin-card star" data-skin="star">
+              <canvas id="star-skin-canvas" width="260" height="270"></canvas>
+              <b>龙 · 星装甲</b>
+              <small>黑金重甲 · 爆炸火炮 · 地面火焰</small>
+            </button>
+          </div>
+          <p id="skin-status" class="skin-status">当前装备：龙 · 原装战甲</p>
+        </div>
+      </section>
+
+      <section id="game" class="screen" aria-label="游戏画面">
+        <canvas id="game-canvas"></canvas>
+        <div class="hud">
+          <div class="health-status">
+            <span>生命</span>
+            <div class="health-track"><i id="health-fill"></i></div>
+            <strong id="health-value">10</strong>
+          </div>
+          <div class="score"><span id="mode-label">普通</span> · <span id="score-label">救援进度</span> <strong id="score">0</strong> / <strong id="score-target">100</strong></div>
+          <div id="ultimate-status" class="ultimate-status">F · 子弹雨</div>
+          <div class="rescue-time">救援时间 <strong id="rescue-time">03:00</strong></div>
+        </div>
+        <div id="hint" class="hint">A / D 移动　W 跳跃　K 蓄力高跳　J / L 左右空翻　空格普攻　F 大招</div>
+        <div id="boss-hud" class="boss-hud">
+          <span>变异首领</span>
+          <div><i id="boss-health-fill"></i></div>
+          <b id="boss-health-value">50</b>
+        </div>
+        <div id="mutation-banner" class="mutation-banner" aria-live="assertive">
+          <span>敌人变异</span>
+        </div>
+        <button id="restart-button" class="restart-button" aria-label="重新开始">↻</button>
+        <div id="result-overlay" class="result-overlay" aria-live="polite">
+          <div class="result-card">
+            <p id="result-kicker">MISSION REPORT</p>
+            <h2 id="result-title">救援成功！</h2>
+            <p id="result-detail"></p>
+            <button id="play-again-button">再来一次</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>

@@ -2,6 +2,8 @@
 
 Dylan 的网页小游戏作品。
 
+后续 Dylan 使用 Codex 创建的新产品，可以记录在 [`PRODUCTS.md`](PRODUCTS.md)。
+
 ## 怎么玩
 
 直接打开 `index.html` 就可以在电脑浏览器里玩。
